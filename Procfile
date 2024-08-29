@@ -1,1 +1,1 @@
-web: gunicorn UdecBuddy.wsgi
+web: gunicorn Proyect_udecbuddy.wsgi
