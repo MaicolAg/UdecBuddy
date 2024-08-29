@@ -12,6 +12,7 @@ urlpatterns = [
     path('registro/', RegistroPageView.as_view(), name='registro'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/login/', CustomLoginView.as_view(), name='login'),
+    path('', RedirectView.as_view(url='/accounts/login/', permanent=True)),
     
     #Usuarios 
     path('editar_usuario/<int:usuario_id>/', EditarUsuarioView.as_view(), name='editar_usuario'),
