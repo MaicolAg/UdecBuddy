@@ -4,15 +4,16 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from home.views import *
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='/accounts/login/', permanent=True)),  # Mueve esta línea al inicio
     path("", include("home.urls")),
     path('admin/', admin.site.urls),
     path('archivos/', ArchivosPageView.as_view(), name='archivos'),
     path('registro/', RegistroPageView.as_view(), name='registro'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/login/', CustomLoginView.as_view(), name='login'),
-    path('', RedirectView.as_view(url='/accounts/login/', permanent=True)),
     
     #Usuarios 
     path('editar_usuario/<int:usuario_id>/', EditarUsuarioView.as_view(), name='editar_usuario'),
@@ -59,5 +60,6 @@ urlpatterns = [
     path('estadisticas/', EstadisticasPageView.as_view(), name='estadisticas'),
     path('calificar_respuesta/', calificar_respuesta, name='calificar_respuesta'),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
