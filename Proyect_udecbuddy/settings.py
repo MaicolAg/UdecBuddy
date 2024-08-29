@@ -1,13 +1,15 @@
 import os
 from pathlib import Path
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-# SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = 'django-insecure-dgp675wp3el8y@knx0*5z#4$9l*3&en_g^8p7)@@(-x!4n%)+&'
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = []
-# Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -18,6 +20,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'home'
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -27,7 +30,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'Proyect_udecbuddy.urls'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -43,19 +48,8 @@ TEMPLATES = [
         },
     },
 ]
-WSGI_APPLICATION = 'Proyect_udecbuddy.wsgi.application'
-# Database
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'udebuddy_test',
-        'USER': 'udebuddy_test',
-        'PASSWORD': 'Udecbuddy1234',
-        'HOST': 'mysql-udebuddy.alwaysdata.net',
-        'PORT':3306,
-    }
-}'''
 
+WSGI_APPLICATION = 'Proyect_udecbuddy.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -64,10 +58,10 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '12345',
         'HOST': 'localhost',
-        'PORT':3306,
+        'PORT': 3306,
     }
 }
-# Password validation
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -82,24 +76,24 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# Internationalization
+
 LANGUAGE_CODE = 'es'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-# Static files (CSS, JavaScript, Images)
+
 STATIC_URL = 'static/'
-# Default primary key field type
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = 'login'  # Esto debería coincidir con el nombre de la ruta de tu vista de inicio de sesión
-LOGIN_REDIRECT_URL = 'login'  # Esto debería coincidir con el nombre de la ruta de tu vista de inicio de sesión
-LOGOUT_REDIRECT_URL ='login'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
 AUTHENTICATION_BACKENDS = ['home.views.EmailBackend', 'home.views.CustomLoginView']
 
 AUTH_USER_MODEL = 'home.Usuarios'
-SESSION_COOKIE_AGE = 1200  # 10 minutes
+SESSION_COOKIE_AGE = 1200
 SESSION_SAVE_EVERY_REQUEST = True
-# media
+
 MEDIA_URL = '/archivos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'archivos')
