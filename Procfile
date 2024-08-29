@@ -1,1 +1,1 @@
-web: gunicorn UdecBuddy.wsgi
+web: python manage.py migrate && gunicorn UdecBuddy.wsgi
