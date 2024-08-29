@@ -27,7 +27,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-ROOT_URLCONF = 'UdecBuddy.urls'
+ROOT_URLCONF = 'Proyect_udecbuddy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -43,7 +43,7 @@ TEMPLATES = [
         },
     },
 ]
-WSGI_APPLICATION = 'UdecBuddy.wsgi.application'
+WSGI_APPLICATION = 'Proyect_udecbuddy.wsgi.application'
 # Database
 '''DATABASES = {
     'default': {
