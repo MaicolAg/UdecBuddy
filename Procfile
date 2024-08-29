@@ -1,1 +1,1 @@
-web: gunicorn Proyect_udecbuddy.wsgi
+web: python manage.py collectstatic && gunicorn Proyect_udecbuddy.wsgi
