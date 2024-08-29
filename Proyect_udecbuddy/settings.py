@@ -53,7 +53,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Proyect_udecbuddy.wsgi.application'
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'udecbuddy',
@@ -62,7 +62,18 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': 3306,
     }
+}'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'udecbuddy',
+        'USER': 'root',
+        'PASSWORD': 'ATULKjbiEoeKWxRaZfmLfcOLvGNuytZX',
+        'HOST': 'junction.proxy.rlwy.net',
+        'PORT': 16069,
+    }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -103,3 +114,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'archivos')
 ALLOWED_HOSTS = ['*']
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+CSRF_TRUSTED_ORIGINS =['http://','https://udecbuddy.up.railway.app']
