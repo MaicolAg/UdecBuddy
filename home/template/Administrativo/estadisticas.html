@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UdecBuddy</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+    <style>
+        .chart-container {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .chart-container img {
+            width: 400px;  /* Ajustar el tamaño de las gráficas */
+            height: auto;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    {% if request.user.usuario == 'Administrador' %}
+    <div id="mySidebar" class="sidebar" style="padding-top: 10px;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href=""></a>
+        <a href="{% url 'table' %}"><img src="{% static 'img/view.png' %}" alt="Table Icon"> Usuarios</a>
+        <a href="{% url 'archivos' %}"><img src="{% static 'img/archivos.png' %}" alt="Archivos Icon"> Archivos</a>
+        <a href="{% url 'chatAdministrador' %}"><img src="{% static 'img/chatbot.png' %}" alt="Chat Icon"> Chat</a>
+        <a href="{% url 'datos' %}"><img src="{% static 'img/datos.png' %}" alt="Profile Icon"> Datos</a>
+        <a href="{% url 'estadisticas' %}"><img src="{% static 'img/tablero.png' %}" alt="Profile Icon"> Tablero</a>
+        <a href="{% url 'profileAdministrador' %}"><img src="{% static 'img/perfil.png' %}" alt="Profile Icon"> Profile</a>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn" style="background:none; border:none; margin:0; padding:0;">
+                <a ><img src="{% static 'img/cerrar.png' %}" alt="Logout Icon"> Logout</a>
+            </button>
+        </form>
+    </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰</button>
+    </div>
+    
+    <div class="register-container">
+        <img src="{% static 'img/logo-udec.png' %}" alt="Logo" class="logo">
+        <div class="register-label"><b>Estadísticas del Chatbot</b></div>
+        
+        <div class="chart-container">
+            <img src="data:image/png;base64,{{ graphic_interacciones }}" alt="Gráfica de Interacciones">
+        </div>
+        <div class="chart-container">
+            <img src="data:image/png;base64,{{ graphic_calificaciones }}" alt="Gráfica de Calificaciones">
+        </div>
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+        }
+    </script>
+    {% else %}
+        <script>
+            alert('Usuario no válido');
+            window.location.href = "{% url 'login' %}";
+        </script>
+    {% endif %}
+</body>
+</html>

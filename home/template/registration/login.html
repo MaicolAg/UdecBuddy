@@ -1,0 +1,37 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UdecBuddy</title>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/registro.css' %}">
+</head>
+<body>
+    {% block content %} 
+    {{ msg }} 
+    <form class="register-container" method="post">
+        {% csrf_token %}
+        <img src="{%static 'img/logo-udec.png' %}" alt="Logo" class="logo">
+        <div class="register-label"><b>Login</b></div>
+        
+        <!-- Renderiza el campo de correo -->
+        <p>
+            <label for="{{ form.username.id_for_label }}"><strong>Correo Institucional:</strong></label>
+            {{ form.username }}
+        </p>
+        
+        <!-- Renderiza el campo de contraseña -->
+        <p>
+            <label for="{{ form.password.id_for_label }}"><strong>Contraseña:</strong></label>
+            {{ form.password }}
+        </p>
+        
+        <button type="submit" name="registrar">Iniciar Sesion</button>
+        <p class="centered-text">¿No tienes una cuenta? <a href="{%url 'registro' %}">Registrar</a></p>
+    </form>
+    
+    {% endblock %}
+</body>
+    </div>

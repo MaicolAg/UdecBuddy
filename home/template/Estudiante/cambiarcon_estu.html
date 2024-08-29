@@ -1,0 +1,65 @@
+<!-- profile.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/registro.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'css/menu.css' %}">
+</head>
+<body>
+    {% if request.user.usuario == 'Estudiante' %}
+    <div id="mySidebar" class="sidebar" style="padding-top: 10px;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href=""></a>
+        <a href="{%url 'chatEstudiante' %}"><img src="{%static 'img/chatbot.png' %}" alt="Chat Icon"> Chat</a>
+        <a href="{%url 'profileEstudiante' %}"><img src="{%static 'img/perfil.png' %}" alt="Profile Icon"> Profile</a>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn" style="background:none; border:none; margin:0; padding:0;">
+                <a ><img src="{%static 'img/cerrar.png' %}" alt="Logout Icon"> Logout</a>
+            </button>
+        </form>
+    </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰</button>
+    </div>
+    
+    <form class="register-container" method="post">
+        {% csrf_token %}
+        <img src="{% static 'img/logo-udec.png' %}" alt="Logo" class="logo">
+        <div class="register-label"><b>Perfil de Usuario</b></div>
+        <!-- Aquí es donde se mostrará el mensaje de error -->
+        {% if form.errors %}
+            <p style="color: red;">{{ form.errors }}</p>
+        {% endif %}
+        
+        <label for="{{ form.password.id_for_label }}"><b>Contraseña:</b></label>
+        <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}">
+        
+        <button type="submit">Cambiar Contraseña</button>
+        <button type="button" onclick="window.history.back();">Cancelar</button>
+
+    </form>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+        }
+    </script>
+    {% else %}
+        <script>
+            alert('Usuario no válido');
+            window.location.href = "{% url 'login' %}";
+        </script>    
+    {% endif %}  
+</body>
+</html>

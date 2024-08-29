@@ -1,0 +1,36 @@
+<!-- editar_usuario.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/registro.css' %}">
+</head>
+<body>
+    {% if request.user.usuario == 'Administrador' %}
+    <form class="register-container" method="post">
+        {% csrf_token %}
+        <img src="{% static 'img/logo-udec.png' %}" alt="Logo" class="logo">
+        <div class="register-label"><b>Editar Usuario</b></div>
+        <!-- Aquí es donde se mostrará el mensaje de error -->
+        {% if form.errors %}
+            <p style="color: red;">{{ form.errors }}</p>
+        {% endif %}
+        <label for="{{ form.password.id_for_label }}"><b>Contraseña:</b></label>
+        <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}">
+        
+        <button type="submit">Cambiar Contraseña</button>
+        <button type="button" onclick="window.history.back();">Cancelar</button>
+    </form>
+    {% else %}
+        <script>
+            alert('Usuario no válido');
+            window.location.href = "{% url 'login' %}";
+        </script>
+    
+        
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UdecBuddy</title>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/archivos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'css/menu.css' %}">
+</head>
+<body>
+    {% if request.user.usuario == 'Administrador' %}
+    <div id="mySidebar" class="sidebar" style="padding-top: 10px;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href=""></a>
+        <a href="{%url 'table' %}"><img src="{%static 'img/view.png' %}" alt="Table Icon"> Usuarios</a>
+        <a href="{%url 'archivos' %}"><img src="{%static 'img/archivos.png' %}" alt="Archivos Icon"> Archivos</a>
+        <a href="{%url 'chatAdministrador' %}"><img src="{%static 'img/chatbot.png' %}" alt="Chat Icon"> Chat</a>
+        <a href="{%url 'datos' %}"><img src="{%static 'img/datos.png' %}" alt="Profile Icon"> Datos</a>
+        <a href="{%url 'estadisticas' %}"><img src="{%static 'img/tablero.png' %}" alt="Profile Icon"> Tablero</a>
+        <a href="{%url 'profileAdministrador' %}"><img src="{%static 'img/perfil.png' %}" alt="Profile Icon"> Profile</a>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn" style="background:none; border:none; margin:0; padding:0;">
+                <a ><img src="{%static 'img/cerrar.png' %}" alt="Logout Icon"> Logout</a>
+            </button>
+        </form>
+    </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰</button>
+    </div>        
+    <div class="register-container">
+        <img src="{%static 'img/logo-udec.png' %}" alt="Logo" class="logo">
+        <div class="register-label"><b>Archivos</b></div>
+        <!-- Botón para abrir la ventana emergente -->
+        <div class="upload-section">
+            <p id="upload-text">Carga los archivos</p>
+            <!-- Aquí comienza el formulario de carga de archivos -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="file-upload" class="custom-file-upload">
+                    <img src="{%static 'img/upload.png' %}" alt="Upload Icon">
+                </label>
+                <input id="file-upload" type="file" name="file-upload" onchange="previewFile()" required/>
+                <button type="submit">Cargar</button>
+            </form>
+            <!-- Aquí termina el formulario de carga de archivos -->
+        </div>
+    </div>
+    <div class="docs-container">
+        <button id="escribirBtn" style="background-color: #007B3E;font-size: 14px;" >Escribir</button>
+        <!-- Muestra la lista de archivos -->
+        <div class="file-list" style="max-height: 400px; overflow-y: auto;">
+            {% for archivo in archivos %}
+                <!-- Aplica el estilo al contenedor del nombre del archivo y el botón de eliminación -->
+                <div class="file-item">
+                    <p>{{ archivo }}</p>
+                    <!-- Botón de eliminación -->
+                    <form action="{% url 'eliminar_archivo' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="archivo" value="{{ archivo }}">
+                        <button type="submit" class="delete-button" >X</button>
+                    </form>
+                </div>
+            {% endfor %}
+            
+            <!-- Superposición -->
+            <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7);"></div>
+            <!-- Ventana emergente -->
+            <div id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <form method="post" action="{% url 'guardar_texto' %}">
+                    {% csrf_token %}
+                    <textarea name="texto" id="texto" rows="4" cols="50" required></textarea>
+                    <button type="submit" style="background-color: #007B3E;font-size: 14px;">Guardar</button>
+                    <!-- Botón de cancelar -->
+                    <button type="button" id="cancelarBtn" style="background-color: #007B3E;font-size: 14px;">Cancelar</button>
+                </form>
+            </div> 
+        </div>
+        <div>
+            <form method="post" action="{% url 'subir_archivos' %}">
+                {% csrf_token %}
+                <button type="submit" style="background-color: #007B3E;font-size: 14px;">Subir</button>
+            </form>
+            
+        </div>
+        
+    </div>
+    <script>
+        function previewFile() {
+            var uploadText = document.querySelector('#upload-text');
+            var file    = document.querySelector('#file-upload').files[0];
+
+            if (file) {
+                uploadText.textContent = file.name;
+            } else {
+                uploadText.textContent = "Carga los archivos";
+            }
+        }
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+        }
+        document.getElementById('escribirBtn').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        });
+        document.getElementById('cancelarBtn').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        });
+        document.getElementById('cancelarBtn').addEventListener('click', function() {
+            document.getElementById('popup').style.display = 'none';
+        });
+    </script> 
+    {% else %}
+        <script>
+            alert('Usuario no válido');
+            window.location.href = "{% url 'login' %}";
+        </script>
+    
+        
+    {% endif %}    
+</body>
+</html>

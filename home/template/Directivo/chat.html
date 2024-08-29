@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="{%static 'css/chat.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'css/menu.css' %}">
+    <title>UdecBuddy</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            float: right;
+            margin-left: 5px;
+        }
+        .bot-icon {
+            width: 20px;
+            height: 20px;
+            float: left;
+            margin-right: 5px;
+        }
+        .message {
+            border-top: 1px solid #007B3E;
+            clear: both;
+            margin-top: 5px;
+            padding-top: 5px;
+        }
+        #chatBox {
+            overflow-y: scroll;
+            height: 300px; /* Ajusta esto a la altura que prefieras */
+        }
+        .user-message {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    {% if request.user.usuario == 'Directivo' %}
+    <div id="mySidebar" class="sidebar" style="padding-top: 10px;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href=""></a>
+        <a href="{%url 'tableDirectivo' %}"><img src="{%static 'img/view.png' %}" alt="Table Icon"> Usuarios</a>
+        <a href="{%url 'archivosDirectivo' %}"><img src="{%static 'img/archivos.png' %}" alt="Archivos Icon"> Archivos</a>
+        <a href="{%url 'chatDirectivo' %}"><img src="{%static 'img/chatbot.png' %}" alt="Chat Icon"> Chat</a>
+        <a href="{%url 'profileDirectivo' %}"><img src="{%static 'img/perfil.png' %}" alt="Profile Icon"> Profile</a>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn" style="background:none; border:none; margin:0; padding:0;">
+                <a ><img src="{%static 'img/cerrar.png' %}" alt="Logout Icon"> Logout</a>
+            </button>
+        </form>
+    </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰</button>
+    </div>
+
+    <div class="wrapper">
+        <div class="title">UdecBuddy Chat</div>
+        <div class="box" id="chatBox">
+            <!-- Los mensajes del chat irán aquí -->
+        </div>
+        
+        <div class="typing-area">
+            <div class="input-field">
+                <input id="chatInput" type="text" placeholder="Escribe tu mensaje" required>
+                <button id="sendButton">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+        }
+
+        $(document).ready(function(){
+            $('#chatInput').keypress(function(e){
+                if(e.which == 13){ // Enter key pressed
+                    $('#sendButton').click(); // Trigger search button click event
+                }
+            });
+
+            $('#sendButton').click(function(){
+                var message = $('#chatInput').val();
+                var userMessage = '<div class="message user-message"><img class="user-icon" src="{%static "img/perfil.png" %}" alt="User Icon">' + message + '</div>';
+                $('#chatBox').append(userMessage);
+                $('#chatInput').val(''); // Limpia el cuadro de entrada
+                $.get('/chat/message/directivo/', {'message': message}, function(data){
+                    var botMessage = '<div class="message"><img class="bot-icon" src="{%static "img/chatbot.png" %}" alt="Bot Icon">' + data.response + '</div>';
+                    $('#chatBox').append(botMessage);
+                });
+            });
+        });
+    </script>
+    {% else %}
+        <script>
+            alert('Usuario no válido');
+            window.location.href = "{% url 'login' %}";
+        </script>    
+    {% endif %}     
+</body>
+</html>

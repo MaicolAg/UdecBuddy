@@ -1,0 +1,86 @@
+.sidebar {
+    height: 100%;
+    width: 240px;  /* Cambia el ancho del menú lateral */
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #007B3E;  /* Cambia el color de fondo del menú lateral a verde */
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    display: none;  /* Oculta el botón "X" por defecto */
+}
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #007B3E;  /* Cambia el color del botón a verde */
+    color: white;  /* Cambia el color del icono a blanco */
+    padding: 10px 15px;
+    border: none;
+    display: none;  /* Oculta el botón por defecto */
+    position: fixed;  /* Fija la posición del botón */
+    top: 10px;  /* Ubica el botón en la esquina superior izquierda */
+    left: 10px;
+}
+
+.openbtn:hover {
+    background-color: #444;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;  /* Cambia el color del texto del menú lateral a blanco */
+    display: block;
+    transition: 0.3s;
+    letter-spacing: 2px;  /* Aumenta el espacio entre las letras */
+    border-bottom: 1px solid white;  /* Añade una línea blanca entre cada elemento */
+    margin-bottom: 50px;  /* Añade un espacio debajo de cada elemento */
+}
+
+.sidebar a img {
+    width: 20px; /* Ancho fijo para todas las imágenes */
+    height: 20px; /* Altura fija para todas las imágenes */
+    margin-right: 10px; /* Margen derecho para alinear con el texto */
+}
+
+/* Añade una clase específica para el botón de cierre de sesión */
+.logout-btn  img{
+    width: 20px; /* Ancho fijo para la imagen de cerrar sesión */
+    height: 20px; /* Altura fija para la imagen de cerrar sesión */
+    margin-right: 10px;
+    
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+@media screen and (max-width: 1300px) {
+    
+    .openbtn {
+        display: block;  /* Muestra el botón cuando la pantalla es pequeña */
+    }
+    .sidebar {
+        width: 0;  /* Oculta el menú lateral cuando la pantalla es pequeña */
+    }
+    .sidebar .closebtn {
+        display: block;  /* Muestra el botón "X" cuando la pantalla es pequeña */
+    }
+    #main {
+        margin-left: 0;  /* Ajusta el margen cuando la pantalla es pequeña */
+    }
+}

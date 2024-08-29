@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #DADADA;
+}
+.register-container {
+    width: 50%;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #DADADA;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    position: relative;
+}
+.register-container .register-label, .register-container button {
+    background-color: #007B3E;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    display: block;
+    text-align: center;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+}
+.register-container .logo {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 70px;
+}
+.register-container input[type="text"], .register-container input[type="password"], .register-container select {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #007B3E;
+    color: white;
+    border-radius: 10px;
+}
+
+.register-container input[type="text"]::placeholder, .register-container input[type="password"]::placeholder {
+    color: white;
+}
+.register-container a {
+    color: #007B3E;
+    text-decoration: none;
+}
+.register-container .centered-text {
+    text-align: center;
+}
+.register-container .usuarios{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #007B3E;
+    color: white;
+    border-radius: 10px;
+    -webkit-appearance: none;  /* Remueve el estilo predeterminado en Chrome y Safari */
+    -moz-appearance: none;  /* Remueve el estilo predeterminado en Firefox */
+    appearance: none;  /* Remueve el estilo predeterminado en otros navegadores */
+}
+.register-container label, .register-container select, .register-container input {
+    display: block;
+    width: 100%;
+}
+
+
+
+@media (max-width: 1020px) {
+    .register-container .logo {
+        display: none;
+    }
+}
