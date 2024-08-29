@@ -13,14 +13,12 @@ from langchain_core.prompts import ChatPromptTemplate
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv('groq_api_key')
-OPENAI_API_KEY = os.getenv('openai_api_key')
+GROQ_API_KEY = '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'
 
 
 def process_question(user_question):
     if user_question:
         os.environ["GROQ_API_KEY"] = GROQ_API_KEY
-        os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
         embeddings = HuggingFaceEmbeddings(
             model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         )

@@ -19,7 +19,7 @@ FILE_LIST = "archivos.txt"
 PINECONE_ENV = "gcp-starter"
 INDEX_NAME = 'arisma'
 
-pinecone = Pinecone(api_key=os.getenv('pinecone_api_key'))
+pinecone = Pinecone(api_key='d1422a1d-4d5a-4f68-be2e-81d6abf2aef7')
 
 def save_name_files(path, new_files):
     old_files = load_name_files(path)
