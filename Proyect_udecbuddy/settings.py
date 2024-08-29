@@ -100,6 +100,6 @@ SESSION_SAVE_EVERY_REQUEST = True
 MEDIA_URL = '/archivos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'archivos')
 
-ALLOWED_HOST = ['http://127.0.0.1:8000/','udecbuddy-production.up.railway.app']
+ALLOWED_HOST = ['*']
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
