@@ -184,6 +184,15 @@ class RegistronnuevoView(TemplateView):
 
 #Archivos
 
+def eliminar_nombre_archivo(path, archivo):
+    if os.path.exists(path):
+        with open(path, "r") as file:
+            lines = file.readlines()
+        with open(path, "w") as file:
+            for line in lines:
+                if line.strip("\n") != archivo:
+                    file.write(line)
+
 class EliminarArchivoView(View):
     def post(self, request, *args, **kwargs):
         archivo = request.POST.get('archivo')
@@ -192,6 +201,9 @@ class EliminarArchivoView(View):
         
         # Elimina el registro del archivo de la base de datos
         Archivos.objects.filter(nombre_archivo=archivo).delete()
+        
+        # Elimina el nombre del archivo del archivo de registro
+        eliminar_nombre_archivo('archivos.txt', archivo)
         
         return HttpResponseRedirect(reverse('archivos'))
     

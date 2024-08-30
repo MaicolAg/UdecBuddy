@@ -59,8 +59,8 @@ def text_to_pinecone(pdf_content, pdf_name):
 def create_embeddings(file_name, text):
     print(f"Creando embeddings del archivo: {file_name}")
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=800,
-        chunk_overlap=100,
+        chunk_size=1500,  # Aumenta el tamaño del fragmento
+        chunk_overlap=200,  # Reduce la superposición
         length_function=len
     )        
     chunks = text_splitter.split_documents(text)
