@@ -321,6 +321,9 @@ class TableAdministrativoPageView(LoginRequiredMixin,TemplateView):
 class ArchivosPageView(LoginRequiredMixin, TemplateView):
     template_name = "Administrativo/archivos.html"
     def get(self, request):
+        # Verifica si el directorio existe, si no, lo crea
+        if not os.path.exists(settings.MEDIA_ROOT):
+            os.makedirs(settings.MEDIA_ROOT)
         # Obtén una lista de los nombres de los archivos en la carpeta 'archivos'
         archivos = os.listdir(settings.MEDIA_ROOT)
         # Ordena los archivos por fecha de modificación en orden descendente
