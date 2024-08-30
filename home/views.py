@@ -15,7 +15,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.urls import reverse
 from django.views import View
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.views import LoginView
 from django.db.models import Count, Avg
@@ -30,7 +30,7 @@ from django.utils.decorators import method_decorator
 from .models import Usuarios, Archivos, ActividadChatbot, CalificacionRespuesta
 from .forms import UsuariosForm, CambiarContrasenaForm,SinusuarioForm
 from .chat import process_question
-from .llm.utils import text_to_pinecone, clean_files
+from .llm.utils import text_to_pinecone, cargar_archivos_nuevos, clean_files
 #Langchain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Pinecone
@@ -215,19 +215,22 @@ class GuardarTextoView(View):
         
         return HttpResponseRedirect(reverse('archivos'))
     
-class SubirArchivosView(View,LoginRequiredMixin):
+
+class SubirArchivosView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         # Obtiene la lista de archivos en la carpeta 'archivos'
         archivos = os.listdir('archivos')
-
-        # Crea los embeddings y los sube a Pinecone
+        extensiones_permitidas = ['.pdf', '.docx', '.txt']
+        
         for nombre_archivo in archivos:
-            with open(os.path.join('archivos', nombre_archivo), 'rb') as f:
-                pdf_content = f.read()
-
-            if pdf_content:  # Comprueba si el archivo está vacío
-                text_to_pinecone(pdf_content, nombre_archivo)
-
+            # Verifica la extensión del archivo
+            extension = os.path.splitext(nombre_archivo)[1].lower()
+            if extension not in extensiones_permitidas:
+                return HttpResponse("Solo se permiten archivos con las extensiones .pdf, .docx o .txt.", status=400)
+        
+        # Llama a la función para cargar solo los archivos nuevos
+        cargar_archivos_nuevos()
+        
         return HttpResponseRedirect(reverse('archivos'))
     
 class EliminarArchivosView(View,LoginRequiredMixin):

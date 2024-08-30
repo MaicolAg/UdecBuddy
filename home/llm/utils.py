@@ -6,12 +6,6 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from langchain.chains.question_answering import load_qa_chain
-
-
-
-
 
 load_dotenv()
 
@@ -31,14 +25,13 @@ def save_name_files(path, new_files):
     
     return old_files
 
-
 def load_name_files(path):
     archivos = []
-    with open(path, "r") as file:
-        for line in file:
-            archivos.append(line.strip())
+    if os.path.exists(path):
+        with open(path, "r") as file:
+            for line in file:
+                archivos.append(line.strip())
     return archivos
-
 
 def clean_files():
     
@@ -50,26 +43,6 @@ def clean_files():
     #create_index()
     return True
 
-'''def create_index():
-    pinecone.create_index(
-        name='test', 
-        dimension=384, 
-        metric="cosine", 
-        spec=PodSpec(environment="us-west1-gcp", pod_type="p1.x1"))
-
-## The following example creates an index that only indexes
-## the 'color' metadata field. Queries against this index
-## cannot filter based on any other metadata field.
-    metadata_config = {
-        'indexed': ['color']
-    }
-
-    pinecone.create_index(
-        name='test', 
-        dimension=384, 
-        metric="cosine", 
-        spec=PodSpec(environment="us-west1-gcp", pod_type="p1.x1", metadata_config=metadata_config))'''
-    
 def text_to_pinecone(pdf_content, pdf_name):
     temp_dir = tempfile.TemporaryDirectory()
     temp_filepath = os.path.join(temp_dir.name, pdf_name)
@@ -89,11 +62,24 @@ def create_embeddings(file_name, text):
         chunk_size=800,
         chunk_overlap=100,
         length_function=len
-        )        
+    )        
     chunks = text_splitter.split_documents(text)
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-        )
+    )
     vectorstore = PineconeVectorStore.from_documents(chunks, embeddings, index_name=INDEX_NAME)
     return True
 
+def cargar_archivos_nuevos():
+    archivos = os.listdir('archivos')
+    archivos_cargados = load_name_files(FILE_LIST)
+
+    nuevos_archivos = [archivo for archivo in archivos if archivo not in archivos_cargados]
+
+    for archivo in nuevos_archivos:
+        with open(os.path.join('archivos', archivo), 'rb') as f:
+            pdf_content = f.read()
+        if pdf_content:
+            text_to_pinecone(pdf_content, archivo)
+    
+    save_name_files(FILE_LIST, nuevos_archivos)

@@ -30,16 +30,16 @@
         <button class="openbtn" onclick="openNav()">☰</button>
     </div>        
     <div class="register-container">
-        <img src="{%static 'img/logo-udec.png' %}" alt="Logo" class="logo">
+        <img src="{% static 'img/logo-udec.png' %}" alt="Logo" class="logo">
         <div class="register-label"><b>Archivos</b></div>
         <!-- Botón para abrir la ventana emergente -->
         <div class="upload-section">
             <p id="upload-text">Carga los archivos</p>
             <!-- Aquí comienza el formulario de carga de archivos -->
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" onsubmit="return validateFile()">
                 {% csrf_token %}
                 <label for="file-upload" class="custom-file-upload">
-                    <img src="{%static 'img/upload.png' %}" alt="Upload Icon">
+                    <img src="{% static 'img/upload.png' %}" alt="Upload Icon">
                 </label>
                 <input id="file-upload" type="file" name="file-upload" onchange="previewFile()" required/>
                 <button type="submit">Cargar</button>
@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="docs-container">
-        <button id="escribirBtn" style="background-color: #007B3E;font-size: 14px;" >Escribir</button>
+        <button id="escribirBtn" style="background-color: #007B3E;font-size: 14px;">Escribir</button>
         <!-- Muestra la lista de archivos -->
         <div class="file-list" style="max-height: 400px; overflow-y: auto;">
             {% for archivo in archivos %}
@@ -59,7 +59,7 @@
                     <form action="{% url 'eliminar_archivo' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="archivo" value="{{ archivo }}">
-                        <button type="submit" class="delete-button" >X</button>
+                        <button type="submit" class="delete-button">X</button>
                     </form>
                 </div>
             {% endfor %}
@@ -82,20 +82,31 @@
                 {% csrf_token %}
                 <button type="submit" style="background-color: #007B3E;font-size: 14px;">Subir</button>
             </form>
-            
         </div>
-        
     </div>
     <script>
         function previewFile() {
             var uploadText = document.querySelector('#upload-text');
-            var file    = document.querySelector('#file-upload').files[0];
-
+            var file = document.querySelector('#file-upload').files[0];
+    
             if (file) {
                 uploadText.textContent = file.name;
             } else {
                 uploadText.textContent = "Carga los archivos";
             }
+        }
+    
+        function validateFile() {
+            var fileInput = document.getElementById('file-upload');
+            var filePath = fileInput.value;
+            var allowedExtensions = /(\.pdf|\.docx|\.txt)$/i;
+    
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Solo se permiten archivos con las extensiones .pdf, .docx o .txt.');
+                fileInput.value = '';
+                return false;
+            }
+            return true;
         }
         function openNav() {
             document.getElementById("mySidebar").style.width = "250px";
