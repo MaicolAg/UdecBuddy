@@ -37,6 +37,28 @@
         .user-message {
             text-align: right;
         }
+        .star-rating {
+            direction: rtl;
+            display: inline-block;
+            padding: 20px;
+            padding-top: 0px;
+        }
+        .star-rating input[type=radio] {
+            display: none;
+        }
+        
+        .star-rating label {
+            color: #808080; /* Color de las estrellas sin calificar */
+            font-size: 20px; /* Tamaño de las estrellas */
+            margin-right: 2px; /* Espacio entre las estrellas */
+            transition: 0.2s;
+        }
+        .star-rating input[type=radio]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #007B3E; /* Color de las estrellas al calificar */
+        }
+        
     </style>
 </head>
 <body>
@@ -60,48 +82,90 @@
     </div>
 
     <div class="wrapper">
-        <div class="title">UdecBuddy Chat</div>
+        <div class="title">UdecBuddy Chat </div>
         <div class="box" id="chatBox">
             <!-- Los mensajes del chat irán aquí -->
         </div>
-        
         <div class="typing-area">
             <div class="input-field">
                 <input id="chatInput" type="text" placeholder="Escribe tu mensaje" required>
                 <button id="sendButton">Enviar</button>
             </div>
         </div>
-    </div>
 
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
-        }
-
-        $(document).ready(function(){
-            $('#chatInput').keypress(function(e){
-                if(e.which == 13){ // Enter key pressed
-                    $('#sendButton').click(); // Trigger search button click event
-                }
-            });
-
-            $('#sendButton').click(function(){
-                var message = $('#chatInput').val();
-                var userMessage = '<div class="message user-message"><img class="user-icon" src="{%static "img/perfil.png" %}" alt="User Icon">' + message + '</div>';
-                $('#chatBox').append(userMessage);
-                $('#chatInput').val(''); // Limpia el cuadro de entrada
-                $.get('/chat/message/directivo/', {'message': message}, function(data){
-                    var botMessage = '<div class="message"><img class="bot-icon" src="{%static "img/chatbot.png" %}" alt="Bot Icon">' + data.response + '</div>';
-                    $('#chatBox').append(botMessage);
+        <script>
+            function openNav() {
+                document.getElementById("mySidebar").style.width = "250px";
+                document.getElementById("main").style.marginLeft = "250px";
+            }
+            function closeNav() {
+                document.getElementById("mySidebar").style.width = "0";
+                document.getElementById("main").style.marginLeft= "0";
+            }
+            
+            $(document).ready(function(){
+                var messageCount = 0;
+                $('#chatInput').keypress(function(e){
+                    if(e.which == 13){ // Enter key pressed
+                        $('#sendButton').click(); // Trigger search button click event
+                    }
+                });
+            
+                $('#sendButton').click(function(){
+                    var message = $('#chatInput').val();
+                    var userMessage = '<div class="message user-message"><img class="user-icon" src="{%static "img/perfil.png" %}" alt="User Icon">' + message + '</div>';
+                    $('#chatBox').append(userMessage);
+                    $('#chatInput').val(''); // Limpia el cuadro de entrada
+                    $.get('/chat/message/', {'message': message}, function(data){
+                        var botMessage = '<div class="message" id="message-' + data.actividad_id + '"><img class="bot-icon" src="{%static "img/chatbot.png" %}" alt="Bot Icon">' + data.response + '</div>';
+                        $('#chatBox').append(botMessage);
+            
+                        // Agregar el sistema de calificación después de la respuesta del bot
+                        var ratingSystem = '<div class="star-rating" id="rating-' + data.actividad_id + '">' +
+                            '<input type="radio" id="5-stars-' + messageCount + '" name="rating-' + messageCount + '" value="5" class="rate-option" />' +
+                            '<label for="5-stars-' + messageCount + '">★</label>' +
+                            '<input type="radio" id="4-stars-' + messageCount + '" name="rating-' + messageCount + '" value="4" class="rate-option" />' +
+                            '<label for="4-stars-' + messageCount + '">★</label>' +
+                            '<input type="radio" id="3-stars-' + messageCount + '" name="rating-' + messageCount + '" value="3" class="rate-option" />' +
+                            '<label for="3-stars-' + messageCount + '">★</label>' +
+                            '<input type="radio" id="2-stars-' + messageCount + '" name="rating-' + messageCount + '" value="2" class="rate-option" />' +
+                            '<label for="2-stars-' + messageCount + '">★</label>' +
+                            '<input type="radio" id="1-star-' + messageCount + '" name="rating-' + messageCount + '" value="1" class="rate-option" />' +
+                            '<label for="1-star-' + messageCount + '">★</label>' +
+                            '</div>';
+                        $('#chatBox').append(ratingSystem);
+                        messageCount++;
+                    });
+                    
+                });
+            
+                $(document).on('change', '.rate-option', function(){
+                    var calificacion = $(this).val();
+            
+                    $.ajax({
+                        url: '/calificar_respuesta/',
+                        type: 'POST',
+                        data: {
+                            'calificacion': calificacion
+                        },
+                        success: function(data) {
+                            console.log('Calificación guardada con éxito');
+                        }
+                    });
+            
+                    // Actualizar solo las estrellas de este sistema de calificación
+                    var starRating = $(this).closest('.star-rating');
+                    starRating.find('.rate-option').each(function(){
+                        var label = $(this).next('label');
+                        if ($(this).val() <= calificacion) {
+                            label.addClass('selected');
+                        } else {
+                            label.removeClass('selected');
+                        }
+                    });
                 });
             });
-        });
-    </script>
+        </script>
     {% else %}
         <script>
             alert('Usuario no válido');
