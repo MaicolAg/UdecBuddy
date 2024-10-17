@@ -55,11 +55,11 @@
                         <td data-column="Correo Institucional">{{ usuario.email }}</td>
                         <td data-column="Semestre">{{ usuario.semestre }}</td>
                         <td data-column="Acciones">
-                            <a href="{% url 'editar_usuario' usuario.id %}"> ✏️ </a>
+                            <a href="{% url 'editar_usuario' usuario.id %}"> Editar ✏️ </a>
                             <hr>
-                            <a href="{% url 'editar_contrasena_usuario' usuario.id %}">*️⃣*️⃣ </a>
+                            <a href="{% url 'editar_contrasena_usuario' usuario.id %}">Cambiar contraseña *️⃣ </a>
                             <hr>
-                            <a href="{% url 'eliminar_usuario' usuario.id %}"> ❌</a>
+                            <a href="{% url 'eliminar_usuario' usuario.id %}"> Eliminar ❌</a>
                             
                             
                         </td>

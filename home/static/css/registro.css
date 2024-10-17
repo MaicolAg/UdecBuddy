@@ -22,7 +22,7 @@ body {
     margin: 8px 0;
     display: block;
     text-align: center;
-    width: 30%;
+    width: 53%;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
@@ -81,3 +81,5 @@ body {
         display: none;
     }
 }
+
+
